@@ -40,8 +40,43 @@ kubectl get nodes -A
 
 ## Install Go
 
-```
+```shell
 sh ./install_golang.sh
 source set_goenv.sh
 ```
 
+## Build EdgeController
+
+```shell
+sh ./setup_cloud_node.sh
+
+```
+
+## Generate Certs
+
+```shell
+sh ./gen_certs.sh
+
+```
+
+## Start EdgeController
+
+```shell
+sh ./start_edgecontroller.sh
+
+```
+
+# Install KubeEdge in Edge Node
+
+## Upload ca.tgz and certs.tgz to /etc/kubeedge
+
+```shell
+sudo su
+cd /etc
+mkdir kubeedge
+# upload ca.tgz and certs.tgz
+tar xvzf ca.tgz
+tar xvaf certs.tgz
+exit
+
+```
