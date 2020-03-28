@@ -36,4 +36,12 @@ source set_kubeconfig.sh RESOURCE-GROUP-NAME
 kubectl get nodes -A
 ```
 
+# Install KubeEdge in Master Node
+
+## Install Go
+
+```
+sh ./install_golang.sh
+source set_goenv.sh
+```
 

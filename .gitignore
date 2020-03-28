@@ -1,2 +1,4 @@
 _output
 translations
+*.tar.gz
+*.tgz
