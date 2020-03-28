@@ -1,0 +1,34 @@
+{
+  "apiVersion": "vlabs",
+  "properties": {
+    "orchestratorProfile": {
+      "orchestratorType": "Kubernetes"
+    },
+    "masterProfile": {
+      "count": 1,
+      "dnsPrefix": "",
+      "vmSize": "Standard_D2s_v3"
+    },
+    "agentPoolProfiles": [
+      {
+        "name": "agentpool1",
+        "count": 1,
+        "vmSize": "Standard_D2s_v3"
+      }
+    ],
+    "linuxProfile": {
+      "adminUsername": "azureuser",
+      "ssh": {
+        "publicKeys": [
+          {
+            "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC09XOSeSlLrOcI8u4+Gerf1WMaA6RfYG+6b/vWRD/kGYSvb5rNoXV2btrUnktCc4eeH57ua1x34Phj4bnxaVdjArMJyeM5FTWsmj2Xh69ZS108Qp4v4zQIskAl5DVz+CgZOjQZNbM4w0C/1onM6h757SlJ+VvSB/P1SQe3NL90ysaZkh/8z0svY7bLidC/0eXiOEKVJyqMzwKHNaWhg7hf06Omskuyu746aYKMC87Tv+gna+rU7dDEAvCWMDyXfwtMZyy6yRXRWhvZSLjhFMql1kpuXe44dEbbKzqOZs60z5zsW2ZiKVZedyPelm4ToLws1uuYxM0UiiA09NBAsTAL"
+          }
+        ]
+      }
+    },
+    "servicePrincipalProfile": {
+      "clientId": "6bb1e900-bf24-4430-a17e-ef2e2b755b6f",
+      "secret": "SAc7wN=AlAImLWoK7BD9EjG2PYcPN-[?"
+    }
+  }
+}
