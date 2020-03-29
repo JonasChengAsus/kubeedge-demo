@@ -38,6 +38,8 @@ kubectl get nodes -A
 
 # Install KubeEdge in Master Node
 
+Enable public load balancer to forward websocket to master node via port 10000 first.
+
 ## Install Go
 
 ```shell
@@ -62,7 +64,19 @@ sh ./gen_certs.sh
 ## Start EdgeController
 
 ```shell
-sh ./start_edgecontroller.sh
+cd $GOPATH/src/github.com/kubeedge/kubeedge/cloud
+sudo ./edgecontroller &
+
+```
+
+## Create Edge Node
+
+Modify the $GOPATH/src/github.com/kubeedge/kubeedge/build/node.json file. 
+Change metadata.name to name of the edge node to deploy.
+
+```shell
+nano $GOPATH/src/github.com/kubeedge/kubeedge/build/node.json 
+kubectl apply -f $GOPATH/src/github.com/kubeedge/kubeedge/build/node.json
 
 ```
 
@@ -106,7 +120,7 @@ sh ./setup_edge_node.sh
 
 ```shell
 cd $GOPATH/src/github.com/kubeedge/kubeedge/build/edge
-./run_daemon.sh only_run_edge mqtt=0.0.0.0:1883 cloudhub=0.0.0.0:10000 edgename=node image="kubeedge/edgecore:latest" containername=container
+sudo ./run_daemon.sh only_run_edge mqtt=0.0.0.0:1883 cloudhub=0.0.0.0:10000 edgename=node image="kubeedge/edgecore:latest" containername=container
 ```
 
 Use the above command to deploy created edge node inside container.
