@@ -91,8 +91,12 @@ CloudCore started
 ## Copy and Download certs.tgz
 
 ```shell
+sudo sh -c "cd /etc/kubeedge/ && tar cvzf ca.tgz ca && tar cvzf certs.tgz certs"
+
+sudo cp /etc/kubeedge/ca.tgz .
 sudo cp /etc/kubeedge/certs.tgz .
-sudo chmod a+r certs.tgz
+
+sudo chmod a+r *.tgz
 # scp certs.tgz to local host
 ```
 
@@ -143,7 +147,15 @@ mkdir kubeedge
 tar xvzf ca.tgz
 tar xvaf certs.tgz
 exit
+```
 
+## Pull Script from Github
+
+```shell
+# ssh to the edge node
+ssh azureuser@EDGE-NODE-IP
+git clone https://github.com/JonasChengAsus/kubeedge-demo.git
+cd kubeedge-demo
 ```
 
 ## Install Docker
@@ -156,28 +168,50 @@ sh get-docker.sh
 
 ```shell
 sh ./install_golang.sh
+# setup go environments
 source set_goenv.sh
-
 ```
 
-## Pull Docker Image of EdgeCore
+## Setup KubeEdge v1.2
 
 ```shell
-sh ./setup_edge_node.sh
-
+# install keadm
+go get github.com/kubeedge/kubeedge/keadm/cmd/keadm
+# join K8S cluster
+sudo $GOPATH/bin/keadm join --cloudcore-ipport=13.76.24.109:10000
 ```
 
-## Start EdgeCore
+* For this command –cloudcore-ipport flag is a Mandatory flag
+* The KubeEdge version used in cloud and edge side should be same.
 
-```shell
-cd $GOPATH/src/github.com/kubeedge/kubeedge/build/edge
-sudo ./run_daemon.sh only_run_edge mqtt=0.0.0.0:1883 cloudhub=0.0.0.0:10000 edgename=node image="kubeedge/edgecore:latest" containername=container
+Sample execution output
+
+```console
+Host has mosquit+ already installed and running. Hence skipping the installation steps !!!
+...
+KubeEdge edgecore is running, For logs visit:  /var/log/kubeedge/edgecore.log
 ```
 
-Use the above command to deploy created edge node inside container.
+## Legacy way to Setup KubeEdge v1.0.0
 
-Replace 0.0.0.0 in cloudhub with the ip of the machine where cloud is running.
-
-Replace node with name of node created.
-
-Replace container with name desired for container.
+> ## Pull Docker Image of EdgeCore
+> 
+> ```shell
+> sh ./setup_edge_node.sh
+> 
+> ```
+> 
+> ## Start EdgeCore
+> 
+> ```shell
+> cd $GOPATH/src/github.com/kubeedge/kubeedge/build/edge
+> sudo ./run_daemon.sh only_run_edge mqtt=0.0.0.0:1883 cloudhub=0.0.0.0:10000 edgename=node image="kubeedge/edgecore:latest" containername=container
+> ```
+> 
+> Use the above command to deploy created edge node > inside container.
+> 
+> Replace 0.0.0.0 in cloudhub with the ip of the machine where cloud is running.
+> 
+> Replace node with name of node created.
+> 
+> Replace container with name desired for container.
