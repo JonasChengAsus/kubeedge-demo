@@ -1,6 +1,5 @@
 # Install AKS-Engine
 
-
 ## macOS
 
 ```shell
@@ -30,55 +29,107 @@ source set_kubeconfig.sh RESOURCE-GROUP-NAME
 
 ```
 
-## Test K8S Cluster
+## Test K8S Cluster is Accessible
 
 ```shell
+kubectl cluster-info
+# there should be at least one master and one agentpool node in Ready status
 kubectl get nodes -A
 ```
 
 # Install KubeEdge in Master Node
 
-Enable public load balancer to forward websocket to master node via port 10000 first.
+* Enable Network Security Group to allow websocket via port 10000.
+* Enable Public Load Balancer to forward websocket to master node via port 10000 as well.
+* Get master node IP
 
-## Install Go
+## Pull Script from Github
+
+```shell
+# ssh to the master node
+ssh azureuser@MASTER-NODE-IP
+git clone https://github.com/JonasChengAsus/kubeedge-demo.git
+cd kubeedge-demo
+```
+
+## Install Go and Setup GO Environments
 
 ```shell
 sh ./install_golang.sh
+# setup go environments
 source set_goenv.sh
 ```
 
-## Build EdgeController
+## Setup KubeEdge v1.2
 
 ```shell
-sh ./setup_cloud_node.sh
-
+# install keadm
+go get github.com/kubeedge/kubeedge/keadm/cmd/keadm
+# init edgecontroller
+sudo $GOPATH/bin/keadm init --kube-config ~azureuser/.kube/config
 ```
 
-## Generate Certs
+Sample execution output
+
+```console
+Kubernetes version verification passed, KubeEdge installation will start...
+...
+Getting CA Private Key
+
+Certificates got generated at: /etc/kubeedge/ ca and /etc/kubeedge/ certs
+certs/
+certs/edge.crt
+certs/edge.key
+certs/edge.csr
+
+Certificates got tared at: /etc/kubeedge/ path, Please copy it to desired edge node (at /etc/kubeedge/ path)
+
+KubeEdge cloudcore is running, For logs visit:  /var/log/kubeedge/cloudcore.log
+CloudCore started
+```
+
+## Copy and Download certs.tgz
 
 ```shell
-sh ./gen_certs.sh
-
+sudo cp /etc/kubeedge/certs.tgz .
+sudo chmod a+r certs.tgz
+# scp certs.tgz to local host
 ```
 
-## Start EdgeController
+## Legacy way to Setup KubeEdge v1.0.0
 
-```shell
-cd $GOPATH/src/github.com/kubeedge/kubeedge/cloud
-sudo ./edgecontroller &
-
-```
-
-## Create Edge Node
-
-Modify the $GOPATH/src/github.com/kubeedge/kubeedge/build/node.json file. 
+> ## Build EdgeController
+> 
+> ```shell
+> sh ./setup_cloud_node.sh
+> 
+> ```
+> 
+> ## Generate Certs
+> 
+> ```shell
+> sh ./gen_certs.sh
+> 
+> ```
+> 
+> ## Start EdgeController
+> 
+> ```shell
+> cd $GOPATH/src/github.com/kubeedge/kubeedge/cloud
+> sudo ./edgecontroller &
+> 
+> ```
+> 
+> ## Create Edge Node
+> 
+> Modify the $GOPATH/src/github.com/kubeedge/kubeedge/build/node.json file. 
 Change metadata.name to name of the edge node to deploy.
-
-```shell
-nano $GOPATH/src/github.com/kubeedge/kubeedge/build/node.json 
-kubectl apply -f $GOPATH/src/github.com/kubeedge/kubeedge/build/node.json
-
-```
+> 
+> ```shell
+> nano $GOPATH/src/github.com/kubeedge/kubeedge/build/node.json 
+> kubectl apply -f $GOPATH/src/github.com/kubeedge/kubeedge/build/node.json
+> 
+> ```
 
 # Install KubeEdge in Edge Node
 
