@@ -2,36 +2,36 @@
 
 ## macOS
 
-```shell
+```bash
 brew install Azure/aks-engine/aks-engine
 ```
 
 ## Linux
 
-```shell
+```bash
 curl -o get-akse.sh https://raw.githubusercontent.com/Azure/aks-engine/master/scripts/get-akse.sh
 sh ./get-akse.sh
 ```
 
-# Deploy K8S Cluster in Azure
+# Provisioning K8S Cluster in Azure
 
-## Deploy K8S Cluster
+## Provisioning K8S Cluster
 
-```shell
+```bash
 aks-engine deploy --subscription-id SUBSCRIPTION-ID --client-id 'CLIENT-ID' --client-secret 'CLIENT-SECRET' --dns-prefix DNS-PREFIX --location LOCATION --api-model kubernetes.json
 
 ```
 
 ## Export K8S Config
 
-```shell
+```bash
 source set_kubeconfig.sh RESOURCE-GROUP-NAME
 
 ```
 
 ## Test K8S Cluster is Accessible
 
-```shell
+```bash
 kubectl cluster-info
 # there should be at least one master and one agentpool node in Ready status
 kubectl get nodes -A
@@ -45,7 +45,7 @@ kubectl get nodes -A
 
 ## Pull Script from Github
 
-```shell
+```bash
 # ssh to the master node
 ssh azureuser@MASTER-NODE-IP
 git clone https://github.com/JonasChengAsus/kubeedge-demo.git
@@ -54,7 +54,7 @@ cd kubeedge-demo
 
 ## Install Go and Setup GO Environments
 
-```shell
+```bash
 sh ./install_golang.sh
 # setup go environments
 source set_goenv.sh
@@ -62,7 +62,7 @@ source set_goenv.sh
 
 ## Setup KubeEdge v1.2
 
-```shell
+```bash
 # install keadm
 go get github.com/kubeedge/kubeedge/keadm/cmd/keadm
 # init edgecontroller
@@ -90,7 +90,7 @@ CloudCore started
 
 ## Copy and Download certs.tgz
 
-```shell
+```bash
 sudo sh -c "cd /etc/kubeedge/ && tar cvzf ca.tgz ca && tar cvzf certs.tgz certs"
 
 sudo cp /etc/kubeedge/ca.tgz .
@@ -104,21 +104,21 @@ sudo chmod a+r *.tgz
 
 > ## Build EdgeController
 > 
-> ```shell
+> ```bash
 > sh ./setup_cloud_node.sh
 > 
 > ```
 > 
 > ## Generate Certs
 > 
-> ```shell
+> ```bash
 > sh ./gen_certs.sh
 > 
 > ```
 > 
 > ## Start EdgeController
 > 
-> ```shell
+> ```bash
 > cd $GOPATH/src/github.com/kubeedge/kubeedge/cloud
 > sudo ./edgecontroller &
 > 
@@ -129,7 +129,7 @@ sudo chmod a+r *.tgz
 > Modify the $GOPATH/src/github.com/kubeedge/kubeedge/build/node.json file. 
 Change metadata.name to name of the edge node to deploy.
 > 
-> ```shell
+> ```bash
 > nano $GOPATH/src/github.com/kubeedge/kubeedge/build/node.json 
 > kubectl apply -f $GOPATH/src/github.com/kubeedge/kubeedge/build/node.json
 > 
@@ -139,7 +139,7 @@ Change metadata.name to name of the edge node to deploy.
 
 ## Upload ca.tgz and certs.tgz to /etc/kubeedge
 
-```shell
+```bash
 sudo su
 cd /etc
 mkdir kubeedge
@@ -151,7 +151,7 @@ exit
 
 ## Pull Script from Github
 
-```shell
+```bash
 # ssh to the edge node
 ssh azureuser@EDGE-NODE-IP
 git clone https://github.com/JonasChengAsus/kubeedge-demo.git
@@ -160,13 +160,13 @@ cd kubeedge-demo
 
 ## Install Docker
 
-```shell
+```bash
 sh get-docker.sh
 ```
 
 ## Install Go
 
-```shell
+```bash
 sh ./install_golang.sh
 # setup go environments
 source set_goenv.sh
@@ -174,7 +174,7 @@ source set_goenv.sh
 
 ## Setup KubeEdge v1.2
 
-```shell
+```bash
 # install keadm
 go get github.com/kubeedge/kubeedge/keadm/cmd/keadm
 # join K8S cluster
@@ -196,14 +196,14 @@ KubeEdge edgecore is running, For logs visit:  /var/log/kubeedge/edgecore.log
 
 > ## Pull Docker Image of EdgeCore
 > 
-> ```shell
+> ```bash
 > sh ./setup_edge_node.sh
 > 
 > ```
 > 
 > ## Start EdgeCore
 > 
-> ```shell
+> ```bash
 > cd $GOPATH/src/github.com/kubeedge/kubeedge/build/edge
 > sudo ./run_daemon.sh only_run_edge mqtt=0.0.0.0:1883 cloudhub=0.0.0.0:10000 edgename=node image="kubeedge/edgecore:latest" containername=container
 > ```
